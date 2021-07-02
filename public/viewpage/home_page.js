@@ -18,7 +18,7 @@ export function addEventListeners() {
 export let cart;
 export async function home_page() {
 
-    if (Auth.currentUser != Constant.adminEmail) {
+    if (!Auth.isAdmin) {
         let html = '<h1>Enjoy shopping!</h1>'
 
         let products;

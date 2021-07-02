@@ -19,6 +19,17 @@ export class Product {
         };
     }
 
+
+    serializeForUpdate() {
+        const p = {};
+        if (this.name) p.name = this.name;
+        if (this.price) p.price = this.price;
+        if (this.summary) p.summary = this.summary;
+        if (this.imageName) p.imageName = this.imageName;
+        if (this.imageURL) p.imageURL = this.imageURL;
+        return p;
+    }
+
     static isSerializedProduct(p) {
         if (!p.name) return false;
         if (!p.price || typeof p.price != 'number') return false;
@@ -28,5 +39,20 @@ export class Product {
         if (!p.qty || !Number.isInteger(p.qty)) return false;
 
         return true;
+    }
+
+    validate(imageFile) {
+        const errors = {};
+
+        if (!this.name || this.name.length < 2)
+            errors.name = 'Product name too short; min 3 chars';
+        if (!this.price || !Number(this.price))
+            errors.price = 'Price is not a number';
+        if (!this.summary || this.summary.length < 5)
+            errors.summary = 'Product summary too short; min 5 chars';
+        if (!imageFile)
+            errors.image = 'Image not selected';
+
+        return errors;
     }
 }

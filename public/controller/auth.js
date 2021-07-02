@@ -7,6 +7,7 @@ import * as Home from '../viewpage/home_page.js'
 import * as Profile from '../viewpage/profile_page.js'
 
 export let currentUser;
+export let isAdmin;
 
 export function addEventListeners() {
 
@@ -60,6 +61,7 @@ export function addEventListeners() {
                 for (let i = 0; i < elements.length; i++) {
                     elements[i].style.display = 'none';
                 }
+                isAdmin = true;
             } else {
                 elements = document.getElementsByClassName('admin-login');
                 for (let i = 0; i < elements.length; i++) {
@@ -69,6 +71,7 @@ export function addEventListeners() {
                 for (let i = 0; i < elements.length; i++) {
                     elements[i].style.display = 'block';
                 }
+                isAdmin = false;
             }
 
             Route.routing(window.location.pathname, window.location.hash);
