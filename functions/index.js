@@ -31,6 +31,7 @@ async function deleteUser(data, context) {
 
     try {
         await admin.auth().deleteUser(data);
+        await admin.firestore().collection(Constant.collectionNames.ACCOUNT_INFO).doc(data).delete();
     } catch (e) {
         if (Constant.DEV) console.log(e);
         throw new functions.https.HttpsError('internal', 'deleteUser failed');
