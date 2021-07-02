@@ -5,3 +5,5 @@ export const collectionNames = {
     PURCHASE_HISTORY: 'purchase_history',
     ACCOUNT_INFO: 'account_info',
 }
+
+export const adminEmail = 'admin@test.com';

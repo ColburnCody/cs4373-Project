@@ -16,7 +16,8 @@
 </head>
 
 <body>
-    <div class="my-banner">My Awesome Online Store</div>
+    <div class="my-banner user-login">My Awesome Online Store</div>
+    <div class="my-banner admin-login">My Awesome Online Store: Admin's page</div>
 
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
@@ -35,19 +36,105 @@
                         <button id="menu-home" class="btn btn-outline-primary">Home</button>
                     </li>
                     <li class="nav-item">
-                        <button id="menu-purchases" class="btn btn-outline-primary modal-post-auth">Purchases</button>
+                        <button id="menu-purchases"
+                            class="btn btn-outline-primary modal-post-auth user-login">Purchases</button>
+                    </li>
+                    <li class="nav-item">
+                        <button id="menu-products"
+                            class="btn btn-outline-primary modal-post-auth admin-login">Products</button>
+                    </li>
+                    <li class="nav-item">
+                        <button id="menu-users"
+                            class="btn btn-outline-primary modal-post-auth admin-login">Users</button>
                     </li>
                     <li class="nav-item">
                         <button id="menu-signout" class="btn btn-outline-danger modal-post-auth">Sign out</button>
                     </li>
                 </ul>
-                <button id="menu-cart" class="btn btn-outline-success modal-post-auth"><img src="images/cart.png"
-                        width="30px"> (<span id="shoppingcart-count">0</span>)
+                <button id="menu-cart" class="btn btn-outline-success modal-post-auth user-login"><img
+                        src="images/cart.png" width="30px"> (<span id="shoppingcart-count">0</span>)
                 </button>
-                <button id="menu-profile" class="btn btn-outline-success modal-post-auth">Profile</button>
+                <button id="menu-profile" class="btn btn-outline-success modal-post-auth user-login">Profile</button>
             </div>
         </div>
     </nav>
+
+    <!-- Modal: Add new product -->
+    <div class="modal fade" id="modal-add-product" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="modal-add-product-label" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modal-add-product-label">Add new product</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="form-add-product">
+                        <div>
+                            <input type="text" name="name" placeholder="product name">
+                            <p id="form-add-product-error-name" class="my-error"></p>
+                        </div>
+                        <div>
+                            <input type="text" name="price" placeholder="price ($)">
+                            <p id="form-add-product-error-price" class="my-error"></p>
+                        </div>
+                        <div>
+                            Summary<br />
+                            <textarea name="summary"></textarea>
+                            <p id="form-add-product-error-summary" class="my-error"></p>
+                        </div>
+                        <div>
+                            <img id="form-add-product-image-tag" style="display: block;" />
+                            <input id="form-add-product-image-button" type="file" value="upload" />
+                            <p id="form-add-product-error-image" class="my-error"></p>
+                        </div>
+                        <div>
+                            <button type="submit" class="btn btn-outline-primary">Add</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Edit Product -->
+    <div class="modal fade" id="modal-edit-product" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="modal-edit-product-title" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modal-edit-product-title">Edit Product</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="form-edit-product" method="post">
+                        <input type="hidden" name="docId" />
+                        <input type="hidden" name="imageName" />
+                        <div>
+                            Name: <input type="text" name="name" />
+                            <p id="form-edit-product-error-name" class="my-error"></p>
+                        </div>
+                        <div>
+                            Price: <input type="text" name="price" />
+                            <p id="form-edit-product-error-price" class="my-error"></p>
+                        </div>
+                        <div>
+                            Summary:<br><textarea name="summary"></textarea>
+                            <p id="form-edit-product-error-summary" class="my-error"></p>
+                        </div>
+                        <div>
+                            <img id="form-edit-product-image-tag" style="display: block;">
+                            <p id="form-edit-product-error-image" class="my-error"></p>
+                            <input type="file" id="form-edit-product-image-button" value="upload" />
+                        </div>
+                        <div>
+                            <button type="submit" class="btn btn-outline-primary">Update</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Modal: Sign in -->
     <div class="modal fade" id="modal-signin" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"

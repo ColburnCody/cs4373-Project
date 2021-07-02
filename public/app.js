@@ -4,12 +4,16 @@ import * as Purchase from './viewpage/purchase_page.js'
 import * as Cart from './viewpage/cart.js'
 import * as Profile from './viewpage/profile_page.js'
 import * as Route from './controller/route.js'
+import * as ProductPage from './viewpage/product_page.js'
+import * as UserPage from './viewpage/user_page.js'
 
 Auth.addEventListeners();
 Home.addEventListeners();
 Purchase.addEventListeners();
 Cart.addEventListeners();
 Profile.addEventListeners();
+ProductPage.addEventListeners();
+UserPage.addEventListeners();
 
 window.onload = () => {
     const pathName = window.location.pathname;

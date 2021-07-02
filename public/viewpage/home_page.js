@@ -17,49 +17,56 @@ export function addEventListeners() {
 
 export let cart;
 export async function home_page() {
-    let html = '<h1>Enjoy shopping!</h1>'
 
-    let products;
-    try {
-        products = await FirebaseController.getProductList();
-        if (cart) {
-            cart.items.forEach(item => {
-                const product = products.find(p => item.docId == p.docId)
-                product.qty = item.qty;
-            })
+    if (Auth.currentUser != Constant.adminEmail) {
+        let html = '<h1>Enjoy shopping!</h1>'
+
+        let products;
+        try {
+            products = await FirebaseController.getProductList();
+            if (cart) {
+                cart.items.forEach(item => {
+                    const product = products.find(p => item.docId == p.docId)
+                    product.qty = item.qty;
+                })
+            }
+        } catch (e) {
+            if (Constant.DEV) console.log(e);
+            Util.info('Cannot get product info', JSON.stringify(e));
         }
-    } catch (e) {
-        if (Constant.DEV) console.log(e);
-        Util.info('Cannot get product info', JSON.stringify(e));
-    }
 
-    for (let i = 0; i < products.length; i++) {
-        html += buildProductView(products[i], i);
-    }
+        for (let i = 0; i < products.length; i++) {
+            html += buildProductView(products[i], i);
+        }
 
-    Element.root.innerHTML = html;
+        Element.root.innerHTML = html;
 
-    const decForms = document.getElementsByClassName('form-dec-qty');
-    for (let i = 0; i < decForms.length; i++) {
-        decForms[i].addEventListener('submit', e => {
-            e.preventDefault();
-            const p = products[e.target.index.value];
-            cart.removeItem(p);
-            document.getElementById('qty-' + p.docId).innerHTML =
-                (p.qty == null || p.qty == 0) ? 'Add' : p.qty;
-            Element.shoppingCartCount.innerHTML = cart.getTotalQty();
-        });
-    }
+        const decForms = document.getElementsByClassName('form-dec-qty');
+        for (let i = 0; i < decForms.length; i++) {
+            decForms[i].addEventListener('submit', e => {
+                e.preventDefault();
+                const p = products[e.target.index.value];
+                cart.removeItem(p);
+                document.getElementById('qty-' + p.docId).innerHTML =
+                    (p.qty == null || p.qty == 0) ? 'Add' : p.qty;
+                Element.shoppingCartCount.innerHTML = cart.getTotalQty();
+            });
+        }
 
-    const incForms = document.getElementsByClassName('form-inc-qty');
-    for (let i = 0; i < incForms.length; i++) {
-        incForms[i].addEventListener('submit', e => {
-            e.preventDefault();
-            const p = products[e.target.index.value];
-            cart.addItem(p);
-            document.getElementById('qty-' + p.docId).innerHTML = p.qty;
-            Element.shoppingCartCount.innerHTML = cart.getTotalQty();
-        });
+        const incForms = document.getElementsByClassName('form-inc-qty');
+        for (let i = 0; i < incForms.length; i++) {
+            incForms[i].addEventListener('submit', e => {
+                e.preventDefault();
+                const p = products[e.target.index.value];
+                cart.addItem(p);
+                document.getElementById('qty-' + p.docId).innerHTML = p.qty;
+                Element.shoppingCartCount.innerHTML = cart.getTotalQty();
+            });
+        }
+    } else {
+        Element.root.innerHTML = `
+    <h1>Welcome to Admin's page</h1>
+    `;
     }
 }
 

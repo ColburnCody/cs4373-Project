@@ -51,6 +51,26 @@ export function addEventListeners() {
                 elements[i].style.display = 'block';
             }
 
+            if (currentUser.email == Constant.adminEmail) {
+                elements = document.getElementsByClassName('admin-login');
+                for (let i = 0; i < elements.length; i++) {
+                    elements[i].style.display = 'block';
+                }
+                elements = document.getElementsByClassName('user-login');
+                for (let i = 0; i < elements.length; i++) {
+                    elements[i].style.display = 'none';
+                }
+            } else {
+                elements = document.getElementsByClassName('admin-login');
+                for (let i = 0; i < elements.length; i++) {
+                    elements[i].style.display = 'none';
+                }
+                elements = document.getElementsByClassName('user-login');
+                for (let i = 0; i < elements.length; i++) {
+                    elements[i].style.display = 'block';
+                }
+            }
+
             Route.routing(window.location.pathname, window.location.hash);
         } else {
             currentUser = null;

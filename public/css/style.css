@@ -25,3 +25,11 @@ input {
     border-width: 0 0 2px 0;
     width: 100%;
 }
+
+.user-login{
+    display: block;
+}
+
+.admin-login{
+    display: none;
+}
