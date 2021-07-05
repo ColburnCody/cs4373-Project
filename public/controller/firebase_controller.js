@@ -1,6 +1,7 @@
 import { AccountInfo } from '../model/account_info.js';
 import * as Constant from '../model/constant.js'
 import { Product } from '../model/product.js';
+import { Review } from '../model/review.js';
 import { ShoppingCart } from '../model/shoppingcart.js';
 
 export async function signIn(email, password) {
@@ -83,10 +84,26 @@ export async function getProductById(docId) {
 
 export async function customerGetProduct(productId) {
     const ref = await firebase.firestore().collection(Constant.collectionNames.PRODUCTS).doc(productId).get();
-    if(!ref.exists) return null;
+    if (!ref.exists) return null;
     const p = new Product(ref.data());
     p.docId = productId;
     return p;
+}
+
+export async function getReviewList(productId) {
+    const snapShot = await firebase.firestore().collection(Constant.collectionNames.REVIEWS).where('productId', '==', productId).orderBy('timestamp', 'desc').get();
+    const reviews = [];
+    snapShot.forEach(doc => {
+        const r = new Review(doc.data())
+        r.docId = doc.id;
+        reviews.push(r);
+    })
+    return reviews;
+}
+
+export async function addReview(review) {
+    const ref = await firebase.firestore().collection(Constant.collectionNames.REVIEWS).add(review.serialize());
+    return ref.id;
 }
 
 const cf_updateProduct = firebase.functions().httpsCallable('cf_updateProduct');
