@@ -33,3 +33,7 @@ input {
 .admin-login{
     display: none;
 }
+
+.text-center{
+    text-align: center;
+}

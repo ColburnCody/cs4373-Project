@@ -5,6 +5,7 @@ import * as Constant from '../model/constant.js'
 import * as Util from './util.js'
 import * as Auth from '../controller/auth.js'
 import { ShoppingCart } from '../model/shoppingcart.js'
+import * as Review from './review_page.js'
 
 export function addEventListeners() {
     Element.menuHome.addEventListener('click', async () => {
@@ -68,6 +69,14 @@ export async function home_page() {
     <h1>Welcome to Admin's page</h1>
     `;
     }
+
+    const reviewButtons = document.getElementsByClassName('review-button-form');
+    for (let i = 0; i < reviewButtons.length; i++) {
+        reviewButtons[i].addEventListener('submit', async e => {
+            e.preventDefault();
+            await Review.review_page(e.target.productId.value);
+        })
+    }
 }
 
 function buildProductView(product, index) {
@@ -91,6 +100,12 @@ function buildProductView(product, index) {
                 <form method="post" class="d-inline form-inc-qty">
                     <input type="hidden" name="index" value="${index}">
                     <button class="btn btn-outline-primary" type="submit">&plus;</button>
+                </form>
+                <form method="post" class="review-button-form">
+                    <input type="hidden" name="productId" value="${product.docId}">
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-outline-secondary">Reviews</button>
+                    </div>
                 </form>
             </div>
         </div>

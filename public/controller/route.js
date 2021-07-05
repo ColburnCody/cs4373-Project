@@ -4,6 +4,7 @@ import * as Cart from '../viewpage/cart.js'
 import * as Profile from '../viewpage/profile_page.js'
 import * as ProductPage from '../viewpage/product_page.js'
 import * as UserPage from '../viewpage/user_page.js'
+import * as Review from '../viewpage/review_page.js'
 
 export const routePathnames = {
     HOME: '/',
@@ -12,6 +13,7 @@ export const routePathnames = {
     CART: '/cart',
     PRODUCTS: '/product',
     USER: '/user',
+    REVIEW: '/reviews',
 }
 
 export const routes = [
@@ -21,6 +23,7 @@ export const routes = [
     { pathName: routePathnames.PROFILE, page: Profile.profile_page },
     { pathName: routePathnames.PRODUCTS, page: ProductPage.product_page },
     { pathName: routePathnames.USER, page: UserPage.users_page },
+    { pathName: routePathnames.REVIEW, page: Review.review_page },
 ];
 
 export function routing(pathName, hash) {

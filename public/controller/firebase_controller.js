@@ -81,6 +81,14 @@ export async function getProductById(docId) {
     }
 }
 
+export async function customerGetProduct(productId) {
+    const ref = await firebase.firestore().collection(Constant.collectionNames.PRODUCTS).doc(productId).get();
+    if(!ref.exists) return null;
+    const p = new Product(ref.data());
+    p.docId = productId;
+    return p;
+}
+
 const cf_updateProduct = firebase.functions().httpsCallable('cf_updateProduct');
 export async function updateProduct(product) {
     const docId = product.docId;
