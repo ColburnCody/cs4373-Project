@@ -113,9 +113,10 @@ export async function review_page(productId) {
 
 }
 
-function buildReview(review) {
-    return Auth.currentUser.uid == review.uid ? `<div class="border border-primary">
-    <div id="${review.docId}" class="bg-info text white">
+export function buildReview(review) {
+    return Auth.currentUser.uid == review.uid ? `
+    <div class="border border-primary">
+    <div class="bg-info text white">
         Reviewed by ${review.email} At ${new Date(review.timestamp).toString()}
     </div>
         ${review.content}
@@ -136,7 +137,7 @@ function buildReview(review) {
             <div class="bg-info text white">
                 Reviewed by ${review.email} At ${new Date(review.timestamp).toString()}
             </div>
-            <p class="review-content">${review.content}</p>
+            ${review.content}
         </div>
         <hr>
     `
