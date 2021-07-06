@@ -36,6 +36,7 @@ export const formEditProduct = {
     errorSummary: document.getElementById('form-edit-product-error-summary'),
     errorImage: document.getElementById('form-edit-product-error-image')
 }
+export const formEditReview = document.getElementById('form-edit-review')
 
 
 // modals
@@ -49,3 +50,4 @@ export const modalTransactionBody = document.getElementById('modal-transaction-b
 export const modalSignup = new bootstrap.Modal(document.getElementById('modal-signup'), { backdrop: 'static' });
 export const modalAddProduct = new bootstrap.Modal(document.getElementById('modal-add-product'), { backdrop: 'static' })
 export const modalEditProduct = new bootstrap.Modal(document.getElementById('modal-edit-product'), { backdrop: 'static' })
+export const modalEditReview = new bootstrap.Modal(document.getElementById('modal-edit-review'), { backdrop: 'static' });

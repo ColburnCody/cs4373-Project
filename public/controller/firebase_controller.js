@@ -90,6 +90,14 @@ export async function customerGetProduct(productId) {
     return p;
 }
 
+export async function getOneReview(docId){
+    const ref = await firebase.firestore().collection(Constant.collectionNames.REVIEWS).doc(docId).get();
+    if(!ref.exists) return null;
+    const r = new Review(ref.data());
+    r.docId = docId;
+    return r;
+}
+
 export async function getReviewList(productId) {
     const snapShot = await firebase.firestore().collection(Constant.collectionNames.REVIEWS).where('productId', '==', productId).orderBy('timestamp', 'desc').get();
     const reviews = [];
@@ -99,6 +107,14 @@ export async function getReviewList(productId) {
         reviews.push(r);
     })
     return reviews;
+}
+
+export async function updateReview(docId, content){
+    await firebase.firestore().collection(Constant.collectionNames.REVIEWS).doc(docId).update(content);
+}
+
+export async function deleteReview(docId){
+    await firebase.firestore().collection(Constant.collectionNames.REVIEWS).doc(docId).delete();
 }
 
 export async function addReview(review) {

@@ -4,6 +4,7 @@ import * as Util from './util.js'
 import * as Constant from '../model/constant.js'
 import * as Auth from '../controller/auth.js'
 import { Review } from '../model/review.js'
+import * as EditReview from '../controller/edit_review.js'
 
 export function addEventListeners() {
 
@@ -87,10 +88,50 @@ export async function review_page(productId) {
         Util.enableButton(button, label);
     })
 
+    const editReviews = document.getElementsByClassName('edit-review-form');
+    for (let i = 0; i < editReviews.length; i++) {
+        editReviews[i].addEventListener('submit', async e => {
+            e.preventDefault();
+            const button = e.target.getElementsByTagName('button')[0];
+            const label = Util.disableButton(button);
+            await EditReview.edit_review(e.target.docId.value)
+            Util.enableButton(button, label);
+        })
+    }
+
+    const deleteReviews = document.getElementsByClassName('delete-review-form');
+    for (let i = 0; i < deleteReviews.length; i++) {
+        deleteReviews[i].addEventListener('submit', async e => {
+            e.preventDefault();
+            if (!window.confirm("Are you sure you want to delete your review?")) return;
+            const button = e.target.getElementsByTagName('button')[0];
+            const label = Util.disableButton(button);
+            await EditReview.delete_review(e.target.docId.value)
+            Util.enableButton(button, label);
+        })
+    }
+
 }
 
 function buildReview(review) {
-    return `
+    return Auth.currentUser.uid == review.uid ? `<div class="border border-primary">
+    <div class="bg-info text white">
+        Reviewed by ${review.email} At ${new Date(review.timestamp).toString()}
+    </div>
+        ${review.content}
+    </div>
+    <div>
+        <form method="post" class="edit-review-form d-inline">
+            <input type="hidden" name="docId" value="${review.docId}">
+            <button id="button-edit-review" class="btn btn-outline-info">Edit</button>
+        </form>
+        <form method="post" class="delete-review-form d-inline">
+            <input type="hidden" name="docId" value="${review.docId}">
+            <button id="button-edit-review" class="btn btn-outline-danger">Delete</button>
+        </form>
+    </div>
+    <hr>
+    ` : `
         <div class="border border-primary">
             <div class="bg-info text white">
                 Reviewed by ${review.email} At ${new Date(review.timestamp).toString()}

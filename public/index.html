@@ -12,7 +12,7 @@
 
     <link href="css/style.css" rel="stylesheet">
 
-    <title>Lesson 3</title>
+    <title>Term Project</title>
 </head>
 
 <body>
@@ -126,6 +126,30 @@
                             <img id="form-edit-product-image-tag" style="display: block;">
                             <p id="form-edit-product-error-image" class="my-error"></p>
                             <input type="file" id="form-edit-product-image-button" value="upload" />
+                        </div>
+                        <div>
+                            <button type="submit" class="btn btn-outline-primary">Update</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Edit thread -->
+    <div class="modal fade" id="modal-edit-review" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="modal-edit-review-title" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modal-edit-review-title">Edit Thread</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="form-edit-review" method="post">
+                        <input type="hidden" name="reviewId" />
+                        <div>
+                            Content:<br><textarea name="content"></textarea>
                         </div>
                         <div>
                             <button type="submit" class="btn btn-outline-primary">Update</button>
