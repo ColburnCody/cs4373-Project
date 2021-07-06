@@ -17,8 +17,9 @@ export function addEventListeners() {
         })
         r.docId = e.target.docId.value;
         try {
-            await FirebaseController.updateReview(r);
-            window.location.reload();
+            await FirebaseController.updateReview(r.docId, content);
+            const reviewTag = document.getElementById(r.docId);
+            reviewTag.getElementsByClassName('review-content')[0].innerHTML = r.content;
             Util.info('Review has been updated', 'Your review has been updated successfully', Element.modalEditReview);
         } catch (e) {
             if (Constant.DEV) console.log(e);
@@ -42,6 +43,7 @@ export async function edit_review(docId) {
         return;
     }
 
+    Element.formEditReview.docId.value = review.docId;
     Element.formEditReview.content.value = review.content;
 
     Element.modalEditReview.show();
