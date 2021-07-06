@@ -18,6 +18,8 @@ export function addEventListeners() {
         r.docId = e.target.docId.value;
         try {
             await FirebaseController.updateReview(r.docId, content);
+            const reviewTag = document.getElementById('review-' + r.docId);
+            reviewTag.getElementsByClassName('review-text')[0].innerHTML = r.content;
             Util.info('Review has been updated', 'Your review has been updated successfully', Element.modalEditReview);
         } catch (e) {
             if (Constant.DEV) console.log(e);

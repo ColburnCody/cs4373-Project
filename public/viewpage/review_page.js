@@ -115,11 +115,11 @@ export async function review_page(productId) {
 
 export function buildReview(review) {
     return Auth.currentUser.uid == review.uid ? `
-    <div class="border border-primary">
+    <div id="review-${review.docId}" class="border border-primary">
     <div class="bg-info text white">
         Reviewed by ${review.email} At ${new Date(review.timestamp).toString()}
     </div>
-        ${review.content}
+        <h5 class="review-text">${review.content}</h5>
     </div>
     <div>
         <form method="post" class="edit-review-form d-inline">
@@ -133,11 +133,11 @@ export function buildReview(review) {
     </div>
     <hr>
     ` : `
-        <div class="border border-primary">
+        <div id="review-${review.docId}" class="border border-primary">
             <div class="bg-info text white">
                 Reviewed by ${review.email} At ${new Date(review.timestamp).toString()}
             </div>
-            ${review.content}
+            <h5 class="review-text">${review.content}</h5>
         </div>
         <hr>
     `
