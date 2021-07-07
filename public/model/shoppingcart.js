@@ -17,6 +17,11 @@ export class ShoppingCart {
         return sc;
     }
 
+    checkPurchase(product) {
+        const item = this.items.find(e => product.docId == e.docId);
+        return item;
+    }
+
     addItem(product) {
         const item = this.items.find(e => product.docId == e.docId);
         if (!item) {

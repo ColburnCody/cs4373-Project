@@ -29,7 +29,7 @@ export async function review_page(productId) {
     }
 
     let html = `
-    <div class="card" style="width: 18rem; display: inline-block;">
+    <div class="card" style="width: 18rem; margin: 0 auto;">
         <img src="${product.imageURL}" class="card-img-top">
         <div class="card-body">
             <h5 class="card-title">${product.name}</h5>
@@ -43,7 +43,7 @@ export async function review_page(productId) {
     `;
 
     html += `
-        <div id="review-body">`
+        <div id="review-body"><br>`
     if (reviews && reviews.length > 0) {
         reviews.forEach(r => {
             html += buildReview(r);
@@ -52,17 +52,42 @@ export async function review_page(productId) {
     html += `</div>`
 
     html += `
-    <div>
-        <textarea id="textarea-add-new-review" placeholder="Leave a review"></textarea>
-        <br>
-        <button id="button-add-new-review" class="btn btn-outline-info">Leave a review</button>
-    </div>
-    `
+        <div>
+            <textarea id="textarea-add-new-review" placeholder="Leave a review"></textarea>
+            <br>
+            <button id="button-add-new-review" class="btn btn-outline-info">Leave a review</button>
+        </div>`
 
     Element.root.innerHTML = html;
 
     document.getElementById('button-add-new-review').addEventListener('click', async () => {
+        if (!Auth.currentUser) {
+            Util.info('Error', 'Please login before leaving a review')
+            return;
+        }
+        let carts
+        try {
+            carts = await FirebaseController.getPurchaseHistory(Auth.currentUser.uid);
+        } catch (e) {
+            if (Constant.DEV) console.log(e)
+            Util.info('Error', JSON.stringify(e))
+        }
+        let item
+        for (let i = 0; i < carts.length; i++) {
+            item = carts[i].checkPurchase(product);
+            if (item) {
+                break;
+            }
+        }
+        if (!item) {
+            Util.info('Error', 'You may only leave reviews on products you have purchased')
+            return;
+        }
         const content = document.getElementById('textarea-add-new-review').value;
+        if (!content) {
+            Util.info('Review too short', 'You have to type something first')
+            return;
+        }
         const uid = Auth.currentUser.uid;
         const email = Auth.currentUser.email;
         const timestamp = Date.now();
@@ -84,8 +109,9 @@ export async function review_page(productId) {
         reviewTag.innerHTML = buildReview(review)
         document.getElementById('review-body').appendChild(reviewTag)
         document.getElementById('textarea-add-new-review').value = ''
-
         Util.enableButton(button, label);
+        Util.info('New review added!', `You have left a new review on ${product.name}`)
+        review_page(productId)
     })
 
     const editReviews = document.getElementsByClassName('edit-review-form');
@@ -108,6 +134,7 @@ export async function review_page(productId) {
             const label = Util.disableButton(button);
             await EditReview.delete_review(e.target.docId.value)
             Util.enableButton(button, label);
+            review_page(productId)
         })
     }
 

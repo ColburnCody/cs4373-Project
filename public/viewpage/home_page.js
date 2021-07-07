@@ -101,13 +101,13 @@ function buildProductView(product, index) {
                     <input type="hidden" name="index" value="${index}">
                     <button class="btn btn-outline-primary" type="submit">&plus;</button>
                 </form>
+            </div>
                 <form method="post" class="review-button-form">
                     <input type="hidden" name="productId" value="${product.docId}">
                     <div class="text-center">
                         <button type="submit" class="btn btn-outline-secondary">Reviews</button>
                     </div>
                 </form>
-            </div>
         </div>
     </div>
     `;

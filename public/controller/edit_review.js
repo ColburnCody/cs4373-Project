@@ -52,6 +52,7 @@ export async function edit_review(docId) {
 export async function delete_review(docId) {
     try {
         await FirebaseController.deleteReview(docId);
+        Util.info('Review deleted', 'Your review has been deleted')
     } catch (e) {
         if (Constant.DEV) console.log(e);
         Util.info('Delete review error', JSON.stringify(e))
