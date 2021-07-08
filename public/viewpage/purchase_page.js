@@ -4,6 +4,7 @@ import * as FirebaseController from '../controller/firebase_controller.js'
 import * as Auth from '../controller/auth.js'
 import * as Constant from '../model/constant.js'
 import * as Util from './util.js'
+import * as Refund from './refund_page.js'
 
 export function addEventListeners() {
     Element.menuPurchases.addEventListener('click', async () => {
@@ -60,6 +61,12 @@ export async function purchase_page() {
             <td>${carts[i].getTotalQty()}</td>
             <td>${Util.currency(carts[i].getTotalPrice())}</td>
             <td>${Date(carts[i].timestamp).toString()}</td>
+            <td>
+                <form method="post" class="request-refund-form">
+                    <input type="hidden" name="shoppingCart" value="${i}">
+                    <button type="submit" class="btn btn-outline-danger">Request refund</button>
+                </form>
+            </td>
         </tr>
         `;
     }
@@ -78,6 +85,9 @@ export async function purchase_page() {
             Element.modalTransactionView.show();
         })
     }
+
+    Refund.addRefundButtonListener();
+
 }
 
 function buildTransactionView(cart) {
@@ -91,6 +101,7 @@ function buildTransactionView(cart) {
       <th scope="col">Quantity</th>
       <th scope="col">Subtotal</th>
       <th scope="col" width="50%">Summary</th>
+      <th scope="col">Request refund</th>
     </tr>
     </thead>
     <tbody>
@@ -104,7 +115,7 @@ function buildTransactionView(cart) {
             <td>${Util.currency(item.price)}</td>
             <td>${item.qty}</td>
             <td>${Util.currency(item.qty * item.price)}</td>
-            <td>${item.Summary}</td>
+            <td>${item.summary}</td>
         </tr>
         `
     })
