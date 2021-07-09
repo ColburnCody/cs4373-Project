@@ -29,8 +29,13 @@ export async function checkOut(cart) {
 }
 
 export async function requestRefund(refund) {
-    const data = refund.serialize(Date.now());
-    await firebase.firestore().collection(Constant.collectionNames.REFUNDS).add(data);
+    const refundExists = await firebase.firestore().collection(Constant.collectionNames.REFUNDS).doc(refund.uid).get()
+    if (refundExists.exists) {
+        return null;
+    } else {
+        const data = refund.serialize(Date.now())
+        await firebase.firestore().collection(Constant.collectionNames.REFUNDS).add(data);
+    }
 }
 
 export async function getPurchaseHistory(uid) {
