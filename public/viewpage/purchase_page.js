@@ -101,7 +101,6 @@ function buildTransactionView(cart) {
       <th scope="col">Quantity</th>
       <th scope="col">Subtotal</th>
       <th scope="col" width="50%">Summary</th>
-      <th scope="col">Request refund</th>
     </tr>
     </thead>
     <tbody>

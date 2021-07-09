@@ -3,6 +3,8 @@ import * as FirebaseController from '../controller/firebase_controller.js'
 import * as Auth from '../controller/auth.js'
 import * as Constant from '../model/constant.js'
 import * as Element from './element.js'
+import { Refund } from '../model/refund.js'
+
 
 export function addRefundButtonListener() {
     const refundButtonForms = document.getElementsByClassName('request-refund-form');
@@ -33,4 +35,41 @@ export async function refund_page(shoppingCart) {
         if (Constant.DEV) console.log(e);
         Util.info('Error', JSON.stringify(e));
     }
+    let html = '<h1>Pending refunds</h1>'
+
+    html += `
+    <table class="table table-striped">
+    <thead>
+    <tr>
+      <th scope="col">Item</th>
+      <th scope="col">Price</th>
+      <th scope="col">Quantity</th>
+    </tr>
+    </thead>
+    <tbody>
+    `;
+
+    for (let i = 0; i < cart.items.length; i++) {
+        html += `
+        <tr>
+            ${buildRefundView(cart.items[i])}
+        </tr>
+        `
+    }
+
+    html += '</tbody></table>'
+
+    html += '<br><h2>Approved refunds</h2>'
+
+
+    Element.root.innerHTML = html;
+
+}
+
+function buildRefundView(item) {
+    return `
+    <td>${item.name}</td>
+    <td>${Util.currency(item.price * item.qty)}</td>
+    <td>${item.qty}</td>
+    `
 }

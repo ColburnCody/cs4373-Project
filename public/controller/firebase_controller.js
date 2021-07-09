@@ -28,6 +28,11 @@ export async function checkOut(cart) {
     await firebase.firestore().collection(Constant.collectionNames.PURCHASE_HISTORY).add(data);
 }
 
+export async function requestRefund(refund) {
+    const data = refund.serialize(Date.now());
+    await firebase.firestore().collection(Constant.collectionNames.REFUNDS).add(data);
+}
+
 export async function getPurchaseHistory(uid) {
     const snapShot = await firebase.firestore().collection(Constant.collectionNames.PURCHASE_HISTORY)
         .where('uid', '==', uid).orderBy('timestamp', 'desc').get();
