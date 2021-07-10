@@ -94,7 +94,7 @@ export async function purchase_page() {
             html += `
         <tr>
             <td>
-                <form class="form-refund-history" method="post">
+                <form class="form-purchase-history" method="post">
                     <input type="hidden" name="index" value="${i}">
                     <button type="submit" class="btn btn-outline-primary">Details</button>
                 </form>
