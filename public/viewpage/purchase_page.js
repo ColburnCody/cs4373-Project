@@ -23,7 +23,6 @@ export async function purchase_page() {
     let html = '<h1>Purchases page</h1>';
 
     let carts
-    let refundList = []
     try {
         carts = await FirebaseController.getPurchaseHistory(Auth.currentUser.uid);
         if (carts.length == 0) {
@@ -50,7 +49,8 @@ export async function purchase_page() {
     `;
 
     for (let i = 0; i < carts.length; i++) {
-        html += `
+        if (carts[i].status == 'ordered') {
+            html += `
         <tr>
             <td>
                 <form class="form-purchase-history" method="post">
@@ -63,57 +63,86 @@ export async function purchase_page() {
             <td>${Date(carts[i].timestamp).toString()}</td>
             <td>
                 <form method="post" class="request-refund-form">
-                    <input type="hidden" name="index" value="${i}">
+                    <input type="hidden" name="docId" value="${carts[i].docId}">
                     <button type="submit" class="btn btn-outline-danger">Request refund</button>
                 </form>
             </td>
         </tr>
         `;
+        }
     }
 
     html += '</tbody></table>';
 
     html += '<br><h3>Pending refunds</h3>'
 
-    if (refundList.length == 0) {
-        html += '<h4>No pending refunds</h4>'
-    } else {
-        html += `
-        <table class="table table-striped">
-        <thead>
-        <tr>
-          <th scope="col">Items</th>
-          <th scope="col">Price</th>
-          <th scope="col">Date</th>
-        </tr>
-        </thead>
-        <tbody>
-        `;
+    html += `
+    <table class="table table-striped">
+    <thead>
+    <tr>
+      <th scope="col">View</th>
+      <th scope="col">Items</th>
+      <th scope="col">Price</th>
+      <th scope="col">Date</th>
+    </tr>
+    </thead>
+    <tbody>
+    `;
 
-        for (let i = 0; i < refundList.length; i++) {
+    for (let i = 0; i < carts.length; i++) {
+        if (carts[i].status == 'refund') {
             html += `
-            <td>${refundList[i].getTotalQty()}</td>
-            <td>${Util.currency(refundList[i].getTotalPrice())}</td>
-            <td>${Date(refundList[i].timestamp).toString()}</td>
-            `
+        <tr>
+            <td>
+                <form class="form-refund-history" method="post">
+                    <input type="hidden" name="index" value="${i}">
+                    <button type="submit" class="btn btn-outline-primary">Details</button>
+                </form>
+            </td>
+            <td>${carts[i].getTotalQty()}</td>
+            <td>${Util.currency(carts[i].getTotalPrice())}</td>
+            <td>${Date(carts[i].timestamp).toString()}</td>
+            <td>
+                <form method="post" class="cancel-refund-form">
+                    <input type="hidden" name="docId" value="${carts[i].docId}">
+                    <button type="submit" class="btn btn-outline-danger">Cancel refund</button>
+                </form>
+            </td>
+        </tr>
+        `;
         }
-
-        html += '</tbody></table>'
     }
 
 
-    Element.root.innerHTML = html;
+    html += '</tbody></table>'
 
-    const requestRefundForms = document.getElementsByClassName('request-refund-form');
-    for (let i = 0; i < requestRefundForms.length; i++) {
-        requestRefundForms[i].addEventListener('submit', async e => {
+
+    Element.root.innerHTML = html
+
+    const refundRequestForms = document.getElementsByClassName('request-refund-form');
+    for (let i = 0; i < refundRequestForms.length; i++) {
+        refundRequestForms[i].addEventListener('submit', async e => {
             e.preventDefault();
-            const index = e.target.index.value;
-            const refund = carts[index];
-            refundList.push(refund);
-            await FirebaseController.requestRefund(refund)
+            const status = 'refund';
+            const cartId = e.target.docId.value;
+            await FirebaseController.requestRefund(cartId, status);
+            Util.info('Refund request', 'Your refund request has been submitted for approval')
+            window.history.back();
         })
     }
+
+    const cancelRequestForms = document.getElementsByClassName('cancel-refund-form');
+    for (let i = 0; i < cancelRequestForms.length; i++) {
+        cancelRequestForms[i].addEventListener('submit', async e => {
+            e.preventDefault();
+            const status = 'ordered';
+            const cartId = e.target.docId.value;
+            await FirebaseController.requestRefund(cartId, status);
+            Util.info('Refund cancelled', 'Your refund request has been cancelled')
+            window.history.back();
+        })
+    }
+
 
     const historyForms = document.getElementsByClassName('form-purchase-history');
     for (let i = 0; i < historyForms.length; i++) {
@@ -126,12 +155,6 @@ export async function purchase_page() {
         })
     }
 
-}
-
-function buildRefundView(cart) {
-    let html = `
-
-    `
 }
 
 function buildTransactionView(cart) {

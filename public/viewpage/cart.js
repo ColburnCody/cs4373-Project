@@ -79,7 +79,8 @@ export async function cart_page() {
 
         const label = Util.disableButton(checkoutButton);
         try {
-            await FirebaseController.checkOut(cart);
+            const docId = await FirebaseController.checkOut(cart);
+            cart.docId = docId;
             Util.info('Success!', 'Checkout complete!');
             window.localStorage.removeItem(`cart-${Auth.currentUser.uid}`);
             cart.empty();

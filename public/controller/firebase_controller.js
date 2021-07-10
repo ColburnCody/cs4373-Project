@@ -25,17 +25,12 @@ export async function getProductList() {
 
 export async function checkOut(cart) {
     const data = cart.serialize(Date.now());
-    await firebase.firestore().collection(Constant.collectionNames.PURCHASE_HISTORY).add(data);
+    const ref = await firebase.firestore().collection(Constant.collectionNames.PURCHASE_HISTORY).add(data);
+    return ref;
 }
 
-export async function requestRefund(refund) {
-    const refundExists = await firebase.firestore().collection(Constant.collectionNames.REFUNDS).doc(refund.uid).get()
-    if (refundExists.exists) {
-        return null;
-    } else {
-        const data = refund.serialize(Date.now())
-        await firebase.firestore().collection(Constant.collectionNames.REFUNDS).add(data);
-    }
+export async function requestRefund(cartId, status) {
+    await firebase.firestore().collection(Constant.collectionNames.PURCHASE_HISTORY).doc(cartId).update({ 'status': status })
 }
 
 export async function getPurchaseHistory(uid) {
@@ -44,6 +39,7 @@ export async function getPurchaseHistory(uid) {
     const carts = [];
     snapShot.forEach(doc => {
         const sc = ShoppingCart.deserialize(doc.data());
+        sc.docId = doc.id;
         carts.push(sc);
     })
     return carts;

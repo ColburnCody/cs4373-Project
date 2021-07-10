@@ -4,16 +4,18 @@ export class ShoppingCart {
     constructor(uid) {
         this.uid = uid;
         this.items = []; // array of serialized product object
+        this.status = 'ordered';
     }
 
     serialize(timestamp) {
-        return { uid: this.uid, items: this.items, timestamp };
+        return { uid: this.uid, items: this.items, timestamp, status: this.status, };
     }
 
     static deserialize(data) {
         const sc = new ShoppingCart(data.uid);
         sc.items = data.items;
         sc.timestamp = data.timestamp;
+        sc.status = data.status;
         return sc;
     }
 
