@@ -11,6 +11,7 @@ export const menuProfile = document.getElementById('menu-profile');
 export const shoppingCartCount = document.getElementById('shoppingcart-count');
 export const menuProducts = document.getElementById('menu-products')
 export const menuUsers = document.getElementById('menu-users')
+export const menuRefunds = document.getElementById('menu-refunds')
 
 // forms
 export const formSignin = document.getElementById('form-signin');

@@ -109,6 +109,8 @@ async function updateProduct(productInfo, context) {
 
 }
 
+
+
 // data ==> document (product) id
 async function getProductById(data, context) {
     if (!isAdmin(context.auth.token.email)) {

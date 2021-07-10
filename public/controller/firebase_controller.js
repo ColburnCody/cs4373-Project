@@ -33,6 +33,21 @@ export async function requestRefund(cartId, status) {
     await firebase.firestore().collection(Constant.collectionNames.PURCHASE_HISTORY).doc(cartId).update({ 'status': status })
 }
 
+export async function getRefundRequests() {
+    const snapShot = await firebase.firestore().collection(Constant.collectionNames.PURCHASE_HISTORY).where('status', '==', 'refund').orderBy('timestamp', 'desc').get();
+    const refunds = [];
+    snapShot.forEach(doc => {
+        const sc = ShoppingCart.deserialize(doc.data());
+        sc.docId = doc.id;
+        refunds.push(sc);
+    })
+    return refunds;
+}
+
+export async function approveRefundRequest(docId) {
+    await firebase.firestore().collection(Constant.collectionNames.PURCHASE_HISTORY).doc(docId).delete();
+}
+
 export async function getPurchaseHistory(uid) {
     const snapShot = await firebase.firestore().collection(Constant.collectionNames.PURCHASE_HISTORY)
         .where('uid', '==', uid).orderBy('timestamp', 'desc').get();
