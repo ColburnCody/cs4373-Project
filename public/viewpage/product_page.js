@@ -6,6 +6,7 @@ import * as Util from './util.js'
 import * as Route from '../controller/route.js'
 import * as Edit from '../controller/edit_product.js'
 import * as Auth from '../controller/auth.js'
+import * as Review from './review_page.js'
 
 let imageFile2Upload
 
@@ -94,6 +95,14 @@ export async function product_page() {
             Util.enableButton(button, label)
         })
     }
+
+    const reviewButtons = document.getElementsByClassName('review-button-form');
+    for (let i = 0; i < reviewButtons.length; i++) {
+        reviewButtons[i].addEventListener('submit', async e => {
+            e.preventDefault();
+            await Review.review_page(e.target.productId.value);
+        })
+    }
 }
 
 async function addNewProduct(form) {
@@ -140,11 +149,16 @@ function buildProductCard(product) {
             <input type="hidden" name="docId" value="${product.docId}">
             <button class="btn btn-outline-primary" type="submit">Edit</button>
         </form>
+        <form method="post" class="review-button-form float-center">
+            <input type="hidden" name="productId" value="${product.docId}">
+                    <button type="submit" class="btn btn-outline-secondary">Reviews</button>
+        </form>
         <form class="form-delete-product float-end" method="post">
             <input type="hidden" name="docId" value="${product.docId}">
             <input type="hidden" name="imageName" value="${product.imageName}">
             <button class="btn btn-outline-danger" type="submit">Delete</button>
         </form>
+
     </div>
     `;
 }

@@ -131,7 +131,7 @@ export async function getReviewList(productId) {
 }
 
 export async function updateReview(docId, content) {
-    await firebase.firestore().collection(Constant.collectionNames.REVIEWS).doc(docId).update({ 'content': content });
+    await firebase.firestore().collection(Constant.collectionNames.REVIEWS).doc(docId).update(content);
 }
 
 export async function deleteReview(docId) {

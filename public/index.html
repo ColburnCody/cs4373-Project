@@ -48,7 +48,8 @@
                             class="btn btn-outline-primary modal-post-auth admin-login">Users</button>
                     </li>
                     <li class="nav-item">
-                        <button id="menu-refunds" class="btn btn-outline-primary modal-post-auth admin-login">Refunds</button>
+                        <button id="menu-refunds"
+                            class="btn btn-outline-primary modal-post-auth admin-login">Refunds</button>
                     </li>
                     <li class="nav-item">
                         <button id="menu-signout" class="btn btn-outline-danger modal-post-auth">Sign out</button>
@@ -139,20 +140,38 @@
         </div>
     </div>
 
-    <!-- Modal: Edit thread -->
+    <!-- Modal: Edit Review -->
     <div class="modal fade" id="modal-edit-review" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
         aria-labelledby="modal-edit-review-title" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modal-edit-review-title">Edit Thread</h5>
+                    <h5 class="modal-title" id="modal-edit-review-title">Edit Review</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="form-edit-review" method="post">
+                    <form id="form-edit-rating method=" post">
                         <input type="hidden" name="docId" />
                         <div>
                             Content:<br><textarea name="content"></textarea>
+                            <br>
+                            Rating:<div class="text-center">
+                                <form method="post" class="rating-form">
+                                    <div class="rating">
+                                        <input id="star5" name="star" type="radio" value="5" class="radio-btn hide" />
+                                        <label for="star5">☆</label>
+                                        <input id="star4" name="star" type="radio" value="4" class="radio-btn hide" />
+                                        <label for="star4">☆</label>
+                                        <input id="star3" name="star" type="radio" value="3" class="radio-btn hide" />
+                                        <label for="star3">☆</label>
+                                        <input id="star2" name="star" type="radio" value="2" class="radio-btn hide" />
+                                        <label for="star2">☆</label>
+                                        <input id="star1" name="star" type="radio" value="1" class="radio-btn hide" />
+                                        <label for="star1">☆</label>
+                                        <div class="clear"></div>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                         <div>
                             <button type="submit" class="btn btn-outline-primary">Update</button>

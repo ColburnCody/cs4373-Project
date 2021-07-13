@@ -42,6 +42,16 @@ export async function review_page(productId) {
     </div>
     `;
 
+    let total = 0;
+    for (let i = 0; i < reviews.length; i++) {
+        total += reviews[i].rating;
+    }
+    let avg = total / reviews.length;
+    html += `
+        <h6>Reviews: ${reviews.length}</h6>
+        <h7>Rating: ${reviews.length > 0 ? avg : 0}</h7>
+    `
+
     html += `
         <div id="review-body"><br>`
     if (reviews && reviews.length > 0) {
@@ -51,12 +61,34 @@ export async function review_page(productId) {
     }
     html += `</div>`
 
+    // https://jsfiddle.net/shadiabuhilal/0kwnb7ph/3/
+    html += `
+    <div class="text-center">
+    <form method ="post" class="rating-form">
+        <div class="rating">
+        <input id="star5" name="star" type="radio" value="5" class="radio-btn hide" />
+        <label for="star5" >☆</label>
+        <input id="star4" name="star" type="radio" value="4" class="radio-btn hide" />
+        <label for="star4" >☆</label>
+        <input id="star3" name="star" type="radio" value="3" class="radio-btn hide" />
+        <label for="star3" >☆</label>
+        <input id="star2" name="star" type="radio" value="2" class="radio-btn hide" />
+        <label for="star2" >☆</label>
+        <input id="star1" name="star" type="radio" value="1" class="radio-btn hide" />
+        <label for="star1" >☆</label>
+        <div class="clear"></div>
+        </div>
+    </form>
+    </div>
+    `
+
     html += `
         <div>
             <textarea id="textarea-add-new-review" placeholder="Leave a review"></textarea>
             <br>
             <button id="button-add-new-review" class="btn btn-outline-info">Leave a review</button>
         </div>`
+
 
     Element.root.innerHTML = html;
 
@@ -91,8 +123,20 @@ export async function review_page(productId) {
         const uid = Auth.currentUser.uid;
         const email = Auth.currentUser.email;
         const timestamp = Date.now();
+        let rating
+        if (document.getElementById('star5').checked) {
+            rating = 5;
+        } else if (document.getElementById('star4').checked) {
+            rating = 4;
+        } else if (document.getElementById('star3').checked) {
+            rating = 3;
+        } else if (document.getElementById('star2').checked) {
+            rating = 2;
+        } else {
+            rating = 1;
+        }
         const review = new Review({
-            uid, email, timestamp, content, productId,
+            uid, email, timestamp, content, productId, rating,
         });
 
         const button = document.getElementById('button-add-new-review');
@@ -141,21 +185,16 @@ export async function review_page(productId) {
 }
 
 export function buildReview(review) {
-    return !Auth.currentUser || Auth.currentUser.uid != review.uid ?
-        `
-        <div id="review-${review.docId}" class="border border-primary">
-            <div class="bg-info text white">
-                Reviewed by ${review.email} At ${new Date(review.timestamp).toString()}
-            </div>
-            <h5 class="review-text">${review.content}</h5>
-        </div>
-        <hr>
-    ` : `
+    let html;
+
+    if (Auth.currentUser.uid == review.uid || Auth.currentUser.uid == 'OQAVqyzc6DTvC0mYIvqNuG0GQ4C2') {
+        html = `
     <div id="review-${review.docId}" class="border border-primary">
     <div class="bg-info text white">
         Reviewed by ${review.email} At ${new Date(review.timestamp).toString()}
     </div>
         <h5 class="review-text">${review.content}</h5>
+        <h6 class="review-rating">${review.rating}</h6>
     </div>
     <div>
         <form method="post" class="edit-review-form d-inline">
@@ -168,5 +207,18 @@ export function buildReview(review) {
         </form>
     </div>
     <hr>
-    `
+    `;
+    } else if (!Auth.currentUser || Auth.currentUser.uid != review.uid) {
+        html = `
+        <div id="review-${review.docId}" class="border border-primary">
+            <div class="bg-info text white">
+                Reviewed by ${review.email} At ${new Date(review.timestamp).toString()}
+            </div>
+            <h5 class="review-text">${review.content}</h5>
+        </div>
+        <hr>
+    `;
+    }
+
+    return html;
 }

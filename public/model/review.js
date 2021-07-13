@@ -5,6 +5,7 @@ export class Review {
         this.email = data.email;
         this.timestamp = data.timestamp;
         this.content = data.content;
+        this.rating = data.rating;
     }
 
     serialize() {
@@ -14,6 +15,7 @@ export class Review {
             email: this.email,
             timestamp: this.timestamp,
             content: this.content,
+            rating: this.rating,
         }
     }
 }
