@@ -42,11 +42,7 @@ export async function review_page(productId) {
     </div>
     `;
 
-    let total = 0;
-    for (let i = 0; i < reviews.length; i++) {
-        total += reviews[i].rating;
-    }
-    let avg = total / reviews.length;
+    let avg = getRatingAvg(reviews);
     html += `
         <h6>Reviews: ${reviews.length}</h6>
         <h7>Rating: ${reviews.length > 0 ? avg : 0}</h7>
@@ -80,7 +76,7 @@ export async function review_page(productId) {
         </div>
     </form>
     </div>
-    `
+    `;
 
     html += `
         <div>
@@ -123,17 +119,13 @@ export async function review_page(productId) {
         const uid = Auth.currentUser.uid;
         const email = Auth.currentUser.email;
         const timestamp = Date.now();
+        let ratingButtons = document.getElementsByClassName('radio-btn')
         let rating
-        if (document.getElementById('star5').checked) {
-            rating = 5;
-        } else if (document.getElementById('star4').checked) {
-            rating = 4;
-        } else if (document.getElementById('star3').checked) {
-            rating = 3;
-        } else if (document.getElementById('star2').checked) {
-            rating = 2;
-        } else {
-            rating = 1;
+        for (let i = 0; i < ratingButtons.length; i++) {
+            if (ratingButtons[i].checked) {
+                rating = ratingButtons[i].value;
+                break;
+            }
         }
         const review = new Review({
             uid, email, timestamp, content, productId, rating,
@@ -221,4 +213,13 @@ export function buildReview(review) {
     }
 
     return html;
+}
+
+function getRatingAvg(reviews) {
+    let total = 0;
+    for (let i = 0; i < reviews.length; i++) {
+        total += reviews[i].rating;
+    }
+    let avg = total / reviews.length;
+    return avg;
 }

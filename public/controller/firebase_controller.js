@@ -130,8 +130,8 @@ export async function getReviewList(productId) {
     return reviews;
 }
 
-export async function updateReview(docId, content) {
-    await firebase.firestore().collection(Constant.collectionNames.REVIEWS).doc(docId).update(content);
+export async function updateReview(docId, content, rating) {
+    await firebase.firestore().collection(Constant.collectionNames.REVIEWS).doc(docId).update({ 'content': content, 'rating': rating });
 }
 
 export async function deleteReview(docId) {

@@ -9,26 +9,21 @@ export function addEventListeners() {
         e.preventDefault();
         const button = e.target.getElementsByTagName('button')[0];
         const label = Util.disableButton(button)
-
         const content = e.target.content.value.trim();
+        let ratingButtons = e.target.getElementsByClassName('radio-btn')
         let rating
-        if (e.target.getElementById('star5').checked) {
-            rating = 5;
-        } else if (e.target.getElementById('star4').checked) {
-            rating = 4;
-        } else if (e.target.getElementById('star3').checked) {
-            rating = 3;
-        } else if (e.target.getElementById('star2').checked) {
-            rating = 2;
-        } else {
-            rating = 1;
+        for (let i = 0; i < ratingButtons.length; i++) {
+            if (ratingButtons[i].checked) {
+                rating = ratingButtons[i].value;
+                break;
+            }
         }
         const r = new Review({
             content: content, rating: rating,
         })
         r.docId = e.target.docId.value;
         try {
-            await FirebaseController.updateReview(r.docId, { content, rating });
+            await FirebaseController.updateReview(r.docId, content, rating);
             const reviewTag = document.getElementById('review-' + r.docId);
             reviewTag.getElementsByClassName('review-text')[0].innerHTML = r.content;
             Util.info('Review has been updated', 'Your review has been updated successfully', Element.modalEditReview);
