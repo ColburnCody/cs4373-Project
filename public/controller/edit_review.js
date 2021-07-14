@@ -22,10 +22,19 @@ export function addEventListeners() {
             content: content, rating: rating,
         })
         r.docId = e.target.docId.value;
+        let stars = '';
+        for (let i = 0; i < r.rating; i++) {
+            stars += '☆';
+        }
+
         try {
             await FirebaseController.updateReview(r.docId, content, rating);
             const reviewTag = document.getElementById('review-' + r.docId);
             reviewTag.getElementsByClassName('review-text')[0].innerHTML = r.content;
+            reviewTag.getElementsByClassName('review-rating')[0].innerHTML = stars;
+            for (let i = 0; i < ratingButtons.length; i++) {
+                ratingButtons[i].checked = false;
+            }
             Util.info('Review has been updated', 'Your review has been updated successfully', Element.modalEditReview);
         } catch (e) {
             if (Constant.DEV) console.log(e);

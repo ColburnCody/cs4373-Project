@@ -42,10 +42,8 @@ export async function review_page(productId) {
     </div>
     `;
 
-    let avg = getRatingAvg(reviews);
     html += `
-        <h6>Reviews: ${reviews.length}</h6>
-        <h7>Rating: ${reviews.length > 0 ? avg : 0}</h7>
+        <h6>Reviews: ${reviews.length == 0 ? 'No reviews yet!' : reviews.length}</h6>
     `
 
     html += `
@@ -60,7 +58,6 @@ export async function review_page(productId) {
     // https://jsfiddle.net/shadiabuhilal/0kwnb7ph/3/
     html += `
     <div class="text-center">
-    <form method ="post" class="rating-form">
         <div class="rating">
         <input id="star5" name="star" type="radio" value="5" class="radio-btn hide" />
         <label for="star5" >☆</label>
@@ -74,7 +71,6 @@ export async function review_page(productId) {
         <label for="star1" >☆</label>
         <div class="clear"></div>
         </div>
-    </form>
     </div>
     `;
 
@@ -92,6 +88,12 @@ export async function review_page(productId) {
         if (!Auth.currentUser) {
             Util.info('Error', 'Please login before leaving a review')
             return;
+        }
+        for (let i = 0; i < reviews.length; i++) {
+            if (Auth.currentUser.uid == reviews[i].uid) {
+                Util.info('Error', 'You may only leave 1 review per product');
+                return;
+            }
         }
         let carts
         try {
@@ -145,6 +147,9 @@ export async function review_page(productId) {
         reviewTag.innerHTML = buildReview(review)
         document.getElementById('review-body').appendChild(reviewTag)
         document.getElementById('textarea-add-new-review').value = ''
+        for (let i = 0; i < ratingButtons.length; i++) {
+            ratingButtons[i].checked = false;
+        }
         Util.enableButton(button, label);
         Util.info('New review added!', `You have left a new review on ${product.name}`)
         review_page(productId)
@@ -178,6 +183,10 @@ export async function review_page(productId) {
 
 export function buildReview(review) {
     let html;
+    let stars = ''
+    for (let i = 0; i < review.rating; i++) {
+        stars += '☆';
+    }
 
     if (Auth.currentUser.uid == review.uid || Auth.currentUser.uid == 'OQAVqyzc6DTvC0mYIvqNuG0GQ4C2') {
         html = `
@@ -186,7 +195,7 @@ export function buildReview(review) {
         Reviewed by ${review.email} At ${new Date(review.timestamp).toString()}
     </div>
         <h5 class="review-text">${review.content}</h5>
-        <h6 class="review-rating">${review.rating}</h6>
+        <h6 class="review-rating">${stars}</h6>
     </div>
     <div>
         <form method="post" class="edit-review-form d-inline">
@@ -207,19 +216,11 @@ export function buildReview(review) {
                 Reviewed by ${review.email} At ${new Date(review.timestamp).toString()}
             </div>
             <h5 class="review-text">${review.content}</h5>
+            <h6 class="review-rating">${stars}</h6>
         </div>
         <hr>
     `;
     }
 
     return html;
-}
-
-function getRatingAvg(reviews) {
-    let total = 0;
-    for (let i = 0; i < reviews.length; i++) {
-        total += reviews[i].rating;
-    }
-    let avg = total / reviews.length;
-    return avg;
 }
