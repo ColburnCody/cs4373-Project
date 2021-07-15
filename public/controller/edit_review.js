@@ -3,6 +3,7 @@ import * as Util from '../viewpage/util.js'
 import * as Constant from '../model/constant.js'
 import * as Element from '../viewpage/element.js'
 import { Review } from '../model/review.js'
+import * as Auth from '../controller/auth.js'
 
 export function addEventListeners() {
     Element.formEditReview.addEventListener('submit', async e => {
@@ -12,12 +13,16 @@ export function addEventListeners() {
         const content = e.target.content.value.trim();
         let ratingButtons = e.target.getElementsByClassName('radio-btn')
         let rating
-        for (let i = 0; i < ratingButtons.length; i++) {
-            if (ratingButtons[i].checked) {
-                rating = ratingButtons[i].value;
-                break;
-            } else {
-                rating = 1;
+        if (Auth.currentUser.email == Constant.adminEmail) {
+            rating = e.target.rating.value;
+        } else {
+            for (let i = 0; i < ratingButtons.length; i++) {
+                if (ratingButtons[i].checked) {
+                    rating = ratingButtons[i].value;
+                    break;
+                } else {
+                    rating = 1;
+                }
             }
         }
         const r = new Review({

@@ -122,7 +122,7 @@ export async function review_page(productId) {
         const email = Auth.currentUser.email;
         const timestamp = Date.now();
         let ratingButtons = document.getElementsByClassName('radio-btn')
-        let rating
+        let rating;
         for (let i = 0; i < ratingButtons.length; i++) {
             if (ratingButtons[i].checked) {
                 rating = ratingButtons[i].value;
