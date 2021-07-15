@@ -9,6 +9,7 @@ import * as UserPage from './viewpage/user_page.js'
 import * as Review from './viewpage/review_page.js'
 import * as EditReview from './controller/edit_review.js'
 import * as Refund from './viewpage/refund_page.js'
+import * as Edit from './controller/edit_product.js'
 
 Auth.addEventListeners();
 Home.addEventListeners();
@@ -20,6 +21,7 @@ UserPage.addEventListeners();
 Review.addEventListeners();
 EditReview.addEventListeners();
 Refund.addEventListeners();
+Edit.addEventListeners();
 
 window.onload = () => {
     const pathName = window.location.pathname;

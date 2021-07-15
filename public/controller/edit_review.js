@@ -16,6 +16,8 @@ export function addEventListeners() {
             if (ratingButtons[i].checked) {
                 rating = ratingButtons[i].value;
                 break;
+            } else {
+                rating = 1;
             }
         }
         const r = new Review({

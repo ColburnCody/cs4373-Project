@@ -36,7 +36,7 @@ export const formEditProduct = {
     errorPrice: document.getElementById('form-edit-product-error-price'),
     errorSummary: document.getElementById('form-edit-product-error-summary'),
     errorImage: document.getElementById('form-edit-product-error-image')
-}
+};
 export const formEditReview = document.getElementById('form-edit-review');
 
 

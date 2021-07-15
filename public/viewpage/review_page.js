@@ -127,6 +127,8 @@ export async function review_page(productId) {
             if (ratingButtons[i].checked) {
                 rating = ratingButtons[i].value;
                 break;
+            } else {
+                rating = 1;
             }
         }
         const review = new Review({
