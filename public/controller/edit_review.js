@@ -67,7 +67,7 @@ export async function edit_review(docId) {
 
     Element.formEditReview.docId.value = review.docId;
     Element.formEditReview.content.value = review.content;
-
+    Element.formEditReview.rating.value = review.rating;
     Element.modalEditReview.show();
 }
 
