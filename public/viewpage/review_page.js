@@ -190,6 +190,19 @@ export function buildReview(review) {
         stars += '☆';
     }
 
+    if (!Auth.currentUser) {
+        html = `
+        <div id="review-${review.docId}" class="border border-primary">
+            <div class="bg-info text white">
+                Reviewed by ${review.email} At ${new Date(review.timestamp).toString()}
+            </div>
+            <h5 class="review-text">${review.content}</h5>
+            <h6 class="review-rating">${stars}</h6>
+        </div>
+        <hr>
+    `;
+        return html;
+    }
     if (Auth.currentUser.uid == review.uid || Auth.currentUser.uid == 'OQAVqyzc6DTvC0mYIvqNuG0GQ4C2') {
         html = `
     <div id="review-${review.docId}" class="border border-primary">
